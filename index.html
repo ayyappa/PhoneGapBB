@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2011, salesforce.com, inc.
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without modification, are permitted provided
+ that the following conditions are met:
+ 
+ Redistributions of source code must retain the above copyright notice, this list of conditions and the
+ following disclaimer.
+ 
+ Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+ the following disclaimer in the documentation and/or other materials provided with the distribution.
+ 
+ Neither the name of salesforce.com, inc. nor the names of its contributors may be used to endorse or
+ promote products derived from this software without specific prior written permission.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+ -->
+<!--
+ Sample HTML page showing use of Force.com JavaScript REST Toolkit from
+ a PhoneGap app using jQuery Mobile
+
+ Save this as www/index.html in your PhoneGap project. You'll also need all
+ the .js files referenced below.
+ -->
+<html>
+    <head>
+        <title>Products</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		
+		
+		
+        <link rel="stylesheet" href="static/jquery.mobile-1.0rc1.min.css" />
+        <script type="text/javascript" src="static/jquery-1.6.4.js"></script>
+        <script type="text/javascript" src="static/jquery.mobile-1.0rc1.min.js"></script>
+        
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+        
+        
+		<script>
+			// We use $j rather than $ for jQuery
+			if (window.$j === undefined) {
+			    $j = $;
+			}
+		</script>
+			
+    </head>
+    <body>
+        <div data-role="page" data-theme="b" id="loginpage">
+            <div data-role="header">
+                <img alt="Logo" src="cblogos.gif" style="float:center;display:inline;">
+            </div>
+            <div data-role="content" style="margin-left: auto; margin-right: auto; text-align: center;">
+                Cases list will appear shortly...
+            </div>
+            <div data-role="footer">
+                <h4>CriterionBrock</h4>
+            </div>
+        </div>
+        <div data-role="page" data-theme="b" id="mainpage">
+            <div data-role="header" data-backbtn="false">
+				<form name="useridform" id="useridform">
+                    <!-- <button data-role="button" id="newbtn">New</button> -->
+                    <input  type="hidden" name="userid" id="userid" />
+                     
+                </form>
+                <img alt="Logo" src="cblogos.gif" style="float:center;display:inline;">
+				<h3 align="center">Cases List</h3>
+            </div>
+            <div data-role="content">
+                
+                <ul id="productlist" data-inset="true" data-role="listview" 
+                    data-theme="c" data-dividertheme="b">
+                </ul>
+                <!-- <form>
+                    <button data-role="button" id="logoutbtn">Logout</button>
+                </form> -->
+            </div>
+            <div data-role="footer">
+                <h4>CriterionBrock</h4>
+            </div>
+        </div>
+        <div data-role="page" data-theme="b" id="detailpage">
+            <div data-role="header">
+                <h1 ><img alt="Logo" src="cblogoss.gif" style="float:center;display:inline;"></h1>
+            </div>
+            <div data-role="content">
+                <table>
+                	<thead align="center"><h4>Case Details:</h4></thead>
+                    <tr><td>Account Name:</td><td id="Name"></td></tr>
+                    <tr><td>Priority:</td><td id="Priority"></td></tr>
+                    <tr><td>Origin:</td><td id="Origin"></td></tr>
+                    <tr><td>Subject:</td><td id="Subject"></td></tr>
+                    <tr><td>Description:</td><td id="Description"></td></tr>
+                    <tr><td>Created Date:</td><td id="CreatedDate"></td></tr>
+                    <tr><td>Reason:</td><td id="Reason"></td></tr>
+                    <tr><td>Closed Date:</td><td id="ClosedDate"></td></tr>
+                    <tr><td>Status:</td><td id="Status"></td></tr>
+                    <tr><td>How many bids:</td><td id="How_many_bids_in_this_request__c"></td></tr>
+                    <tr><td>Bids assigned to:</td><td id="Bids_assigned_to"></td></tr>
+                    <tr><td>Bids completed:</td><td id="Bids_completed__c"></td></tr>
+                    <tr><td>Bid needs information from purchasing:</td><td id="Bid_needs_information_from_purchasing__c"></td></tr>
+                    <tr><td>Bid needs information from AE:</td><td id="Bid_needs_information_from_AE__c"></td></tr>
+                    <tr><td>How many measures in this request:</td><td id="How_many_measures_in_this_request__c"></td></tr>
+                    <!-- <tr><td>Measures assigned to:</td><td id="Measures_assigned_to__c"></td></tr> -->
+                    <tr><td>Measures completed:</td><td id="Measures_completed__c"></td></tr>
+                    <tr><td>Include special order products:</td><td id="Include_special_order_products__c"></td></tr>
+                    <tr><td>Includes common area:</td><td id="Includes_common_area__c"></td></tr>
+                   <!--client.retrieve("Case", id, "Id,Account.Name,CreatedDate,Priority,Origin,Subject,Description,CreatedDate,Reason,ClosedDate,
+                   Status,Type,How_many_bids_in_this_request__c,Bids_assigned_to__c,Bids_completed__c,Bid_needs_infomation_from_purchasing__c,Bid_needs_information_from_AE__c,
+                   How_many_measures_in_this_request__c,Measures_assigned_to__c,Measures_completed__c,Include_special_order_products__c,Includes_common_area__c"   
+                   <tr><td>Industry:</td><td id="Industry"></td></tr>-->
+                </table>
+                <form name="accountdetail" id="accountdetail">
+                    <input type="hidden" name="Id" id="Id" />
+                    <button data-role="button" id="editbtn">Edit</button>
+                    <!-- <button data-role="button" id="deletebtn" data-icon="delete" 
+                        data-theme="e">Delete</button> -->
+                </form>
+            </div>
+            <div data-role="footer">
+                <h4>CriterionBrock</h4>
+            </div>
+        </div>
+        <div data-role="page" data-theme="b" id="editpage">
+            <div data-role="header">
+                <!-- <h1 id="accformheader">Edit Case</h1> -->
+                <h1 ><img alt="Logo" src="cblogoss.gif" style="float:center;display:inline;"></h1>
+            </div>
+            <div data-role="content">
+                <form name="accountform" id="accountform">
+                    <input type="hidden" name="Id" id="Id" />
+                    <table>
+                        <tr>
+                            <td>Measures completed:</td>
+                            <td><input name="Measures_completed__c" id="Measures_completed__c" data-theme="c"/></td>
+                        </tr>
+                       <!--  <tr>
+                            <td>Id:</td>
+                            <td><input name="Industry" id="Industry" 
+                                data-theme="c"/></td>
+                        </tr> -->
+                    </table>
+                    <button data-role="button" id="actionbtn">Action</button>
+                </form>
+            </div>
+            <div data-role="footer">
+                <h4>CriterionBrock</h4>
+            </div>
+        </div>
+    </body>
+</html>
